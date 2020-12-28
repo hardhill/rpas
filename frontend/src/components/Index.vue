@@ -3,7 +3,7 @@
     <div class="panel">
       <h2>BotX</h2>
       <div class="grid-view">
-        <Card number="1" login="03350107"/>
+        <Card number="1" login="03350107" v-for="i in 4" :key="i"/>
       </div>
     </div>
   </div>
