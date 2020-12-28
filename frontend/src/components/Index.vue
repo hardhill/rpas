@@ -2,16 +2,21 @@
   <div class="main">
     <div class="panel">
       <h2>BotX</h2>
-      <div class="card">lkjsdlkjsldkj</div>
-      <div class="card">lkjsdlkjsldkj</div>
-      <div class="card">lkjsdlkjsldkj</div>
+      <div class="grid-view">
+        <Card number="1" login="03350107"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Card from "@/components/Card.vue"
 export default {
-  name: "main",
+ components:{
+   Card
+ },
+ 
+  
 };
 </script>
 
@@ -29,14 +34,14 @@ export default {
   width: 640px;
   background-color: rgb(45, 44, 43);
   padding: 2rem 1rem;
-  
 }
 h2 {
   color: aliceblue;
-  
 }
-.card {
-  width: 16rem;
-  
+.grid-view{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
 </style>
