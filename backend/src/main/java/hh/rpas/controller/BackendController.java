@@ -37,6 +37,13 @@ public class BackendController {
         return result;
     }
 
+    @RequestMapping(path="/seconds")
+    public int getSeconds(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSeconds(login);
+        return result;
+    }
     // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
     // Required because of 'mode: history' usage in frontend routing, see README for further details
 

@@ -1,118 +1,145 @@
 <template>
   <div class="card">
-      <div class="card-header">
-      <div class="title"><img src="1.png"></div>
-      <div class="list-point">{{number}}</div>
-      <div class="login">{{login}}</div>
-      
+    <div class="card-header">
+      <div class="title"><img src="1.png" /></div>
+      <div class="list-point">{{ number }}</div>
+      <div class="login">{{ login }}</div>
+    </div>
+    <div class="card-body">
+      <div class="time-info">
+        <img src="clock_color.png" />
+        <div class="time-text">{{seconds}}</div>
       </div>
-      <div class="card-body">
-          <div class="time-info"><img src="clock_color.png"/><div class="time-text">3ч 23м 04с</div></div>
-          <div class="sign-info">
-            <img src="check.png"/><span>{{succproc}}</span>
-            <img src="cancel_2.png"/><span>{{errproc}}</span>
-          </div>
-          
+      <div class="sign-info">
+        <img src="check.png" /><span>{{ succproc }}</span>
+        <img src="cancel_2.png" /><span>{{ errproc }}</span>
       </div>
-      <div class="card-footer"><img src="angle-arrow-down.png"/></div>
+    </div>
+    <div class="card-footer"><img src="angle-arrow-down.png" /></div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
-    name:"Card",
-    props:["number","login"],
-    data:()=>{
-        return {
-            n_succproc:0,
-            n_errproc:0
-        }
+  name: "Card",
+  props: ["number", "login"],
+  data: () => {
+    return {
+      n_succproc: 0,
+      n_errproc: 0,
+      n_seconds: 0,
+    };
+  },
+  computed: {
+    succproc() {
+      return this.n_succproc;
     },
-    computed:{
-        succproc(){
-            return this.n_succproc
-        },
-        errproc(){
-            return this.n_errproc
-        }
-            
-        
+    errproc() {
+      return this.n_errproc;
     },
-    methods:{
-        getErrproc(login){
-            axios.get("http://localhost:8098/api/errproc?login="+login).then(resp=>{
-                this.n_errproc = resp.data
-            }).catch(err=>{
+    seconds() {
+      return this.secondsToHms(this.n_seconds);
+    },
+  },
+  methods: {
+    getErrproc(login) {
+      axios
+        .get("http://localhost:8098/api/errproc?login=" + login)
+        .then((resp) => {
+          this.n_errproc = resp.data;
+        })
+        .catch((err) => {});
+    },
+    getSuccproc(login) {
+      axios
+        .get("http://localhost:8098/api/succproc?login=" + login)
+        .then((response) => {
+          this.n_succproc = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getSeconds(login) {
+      axios
+        .get("http://localhost:8098/api/seconds?login=" + login)
+        .then((response) => {
+            console.log(response)
+          this.n_seconds = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor((d % 3600) / 60);
+      var s = Math.floor((d % 3600) % 60);
 
-            })
-            
-        },
-        getSuccproc(login){
-            axios.get("http://localhost:8098/api/succproc?login="+login).then(response=>{
-                this.n_succproc = response.data
-            }).catch(err=>{
-                console.log(err)
-            })
-        }
+      var hDisplay = h > 0 ? h + (h == 1 ? "ч. " : "ч. ") : "";
+      var mDisplay = m > 0 ? m + (m == 1 ? "мин. " : "мин. ") : "";
+      var sDisplay = s > 0 ? s + (s == 1 ? "сек." : "сек.") : "";
+      return hDisplay + mDisplay + sDisplay;
     },
-    mounted(){
-        this.getErrproc(this.login)
-        this.getSuccproc(this.login)
-    }
-    
-}
+  },
+  mounted() {
+      this.getSeconds(this.login)
+    this.getErrproc(this.login);
+    this.getSuccproc(this.login);
+  },
+};
 </script>
 
 <style lang="scss" scope>
 .card {
-    display: block;
+  display: block;
   width: 14rem;
   margin: 1rem 2rem;
   background-color: aliceblue;
 }
-.card-header{
-    position: relative; 
-    
- }
-.list-point{
-    position: absolute;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 3em;
-    color: rgb(220, 245, 243);
-    left:5px;
-    top:4px;
-    z-index: 3;
+.card-header {
+  position: relative;
 }
-.login{
-    position: absolute;
-    color: rgb(218, 193, 193);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    right: 5px;
-    top:4px;
+.list-point {
+  position: absolute;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 3em;
+  color: rgb(220, 245, 243);
+  left: 5px;
+  top: 4px;
+  z-index: 3;
 }
-.title{
-    height: 3rem;
-    overflow: hidden;
+.login {
+  position: absolute;
+  color: rgb(218, 193, 193);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  right: 5px;
+  top: 4px;
 }
-.title img{
-    min-width: 100%;
-    min-height: 100%;
-    flex-shrink: 0;
+.title {
+  height: 3rem;
+  overflow: hidden;
 }
-.time-info{
-    display: flex;
-    margin: 1rem;
-    justify-content: space-between;
-    align-items: center;
+.title img {
+  min-width: 100%;
+  min-height: 100%;
+  flex-shrink: 0;
 }
-.sign-info{
-    display: flex;
-    margin: 1rem;
-    justify-content: space-between;
-    align-items: center;
+.time-info {
+  display: flex;
+  margin: 1rem;
+  justify-content: space-between;
+  align-items: center;
 }
-.card-footer img{
-    cursor: pointer;
+.sign-info {
+  display: flex;
+  margin: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-footer img {
+  cursor: pointer;
 }
 </style>
