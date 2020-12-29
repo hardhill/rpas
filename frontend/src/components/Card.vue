@@ -9,8 +9,8 @@
       <div class="card-body">
           <div class="time-info"><img src="clock_color.png"/><div class="time-text">3ч 23м 04с</div></div>
           <div class="sign-info">
-            <img src="check.png"/><span>203</span>
-            <img src="cancel_2.png"/><span>12</span>
+            <img src="check.png"/><span>{{succproc}}</span>
+            <img src="cancel_2.png"/><span>{{errproc}}</span>
           </div>
           
       </div>
@@ -19,15 +19,48 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
     name:"Card",
     props:["number","login"],
     data:()=>{
         return {
-            nomer:23
+            n_succproc:0,
+            n_errproc:0
         }
+    },
+    computed:{
+        succproc(){
+            return this.n_succproc
+        },
+        errproc(){
+            return this.n_errproc
+        }
+            
+        
+    },
+    methods:{
+        getErrproc(login){
+            axios.get("http://localhost:8098/api/errproc?login="+login).then(resp=>{
+                this.n_errproc = resp.data
+            }).catch(err=>{
+
+            })
+            
+        },
+        getSuccproc(login){
+            axios.get("http://localhost:8098/api/succproc?login="+login).then(response=>{
+                this.n_succproc = response.data
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
+    },
+    mounted(){
+        this.getErrproc(this.login)
+        this.getSuccproc(this.login)
     }
+    
 }
 </script>
 

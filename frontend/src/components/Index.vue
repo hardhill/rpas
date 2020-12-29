@@ -3,7 +3,7 @@
     <div class="panel">
       <h2>BotX</h2>
       <div class="grid-view">
-        <Card number="1" login="03350107"/>
+        <Card :number="index+1" :login="i" v-for="(i,index) in logins" :key="i"/>
       </div>
     </div>
   </div>
@@ -15,7 +15,24 @@ export default {
  components:{
    Card
  },
- 
+ data:function(){
+   return {
+     
+   }
+ },
+ computed:{
+   logins:function(){
+     return this.$store.getters.getLogins
+   }
+ },
+ methods:{
+   getlogins(){
+    this.$store.dispatch('act_logins')
+   }
+ },
+ mounted(){
+   this.getlogins()
+ }
   
 };
 </script>

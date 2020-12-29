@@ -1,38 +1,44 @@
 package hh.rpas.controller;
 
-import hh.rpas.exception.UserNotFoundException;
-import hh.rpas.domain.User;
-import hh.rpas.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-@RestController()
+import java.util.List;
+
+@RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class BackendController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BackendController.class);
-
-    public static final String HELLO_TEXT = "Hello from Spring Boot Backend!";
-    public static final String SECURED_TEXT = "Hello from the secured resource!";
 
     @Autowired
-    private UserRepository userRepository;
+    JdbcTemplate jdbcTemplate;
+    private InfocenterDAO infocenterDAO;
 
-    @RequestMapping(path = "/log")
-    public String sayHello() {
-        LOG.info("GET called on /hello resource");
-        return HELLO_TEXT;
+    @RequestMapping(path = "/logins")
+    public List<String> getLogins() {
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        return infocenterDAO.getLogins();
+    }
+    @RequestMapping(path="/errproc")
+    public int getErrorProcess(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getErrorProcess(login);
+        return result;
+    }
+    @RequestMapping(path="/succproc")
+    public int getSuccProcess(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccProcess(login);
+        return result;
     }
 
     // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
     // Required because of 'mode: history' usage in frontend routing, see README for further details
-    @RequestMapping(value = "{_:^(?!index\\.html|api).*$}")
-    public String redirectApi() {
-        LOG.info("URL entered directly into the Browser, so we need to redirect...");
-        return "forward:/";
-    }
+
 
 }
