@@ -11,8 +11,8 @@
         <div class="time-text">{{seconds}}</div>
       </div>
       <div class="sign-info">
-        <img src="check.png" alt="check" /><span>{{ succproc }}</span>
-        <img src="cancel_2.png" alt="cancel" /><span>{{ errproc }}</span>
+        <img src="check_all.png" alt="check_all" /><span>{{ process }}</span>
+        <img src="check.png" alt="check" /><span>{{ succproc }} ({{procent}}%)</span>
       </div>
     </div>
     <div class="card-footer"><img src="angle-arrow-down.png" alt="" /></div>
@@ -21,13 +21,14 @@
 
 <script>
 import axios from "axios";
+const URL_ROOT = "http://localhost:8098/api/"
 export default {
   name: "Card",
   props: ["number", "login"],
   data: () => {
     return {
       n_succproc: 0,
-      n_errproc: 0,
+      n_process: 0,
       n_seconds: 0,
     };
   },
@@ -35,25 +36,28 @@ export default {
     succproc() {
       return this.n_succproc;
     },
-    errproc() {
-      return this.n_errproc;
+    process() {
+      return this.n_process;
     },
     seconds() {
       return this.secondsToHms(this.n_seconds);
     },
+    procent(){
+      return Math.floor((this.n_succproc/this.n_process)*100)
+    }
   },
   methods: {
-    getErrproc(login) {
+    getProcessToDay(login) {
       axios
-        .get("http://localhost:8098/api/errproc?login=" + login)
+        .get(URL_ROOT+"processtoday?login=" + login)
         .then((resp) => {
-          this.n_errproc = resp.data;
+          this.n_process = resp.data;
         })
         .catch((err) => {console.log(err)});
     },
-    getSuccproc(login) {
+    getSuccprocToDay(login) {
       axios
-        .get("http://localhost:8098/api/succproc?login=" + login)
+        .get(URL_ROOT+"successtoday?login=" + login)
         .then((response) => {
           this.n_succproc = response.data;
         })
@@ -63,7 +67,7 @@ export default {
     },
     getSeconds(login) {
       axios
-        .get("http://localhost:8098/api/seconds?login=" + login)
+        .get(URL_ROOT+"secondsday?login=" + login)
         .then((response) => {
             
           this.n_seconds = response.data;
@@ -85,9 +89,9 @@ export default {
     },
   },
   mounted() {
-      this.getSeconds(this.login)
-    this.getErrproc(this.login);
-    this.getSuccproc(this.login);
+    this.getSuccprocToDay(this.login)
+    this.getProcessToDay(this.login)
+    this.getSeconds(this.login)
   },
 };
 </script>

@@ -7,18 +7,22 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class InfocenterDAO {
 
 
+    private final String GET_USERTODAY = "SELECT COUNT(*) AS cnt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
     final private String GET_LOGINS = "SELECT login FROM v_login";
     final private String GET_SUCCESS = "SELECT COUNT(*) AS succ FROM v_log WHERE result = 'успешно' and login = '%s'";
-    final private String GET_SUCCESSMONTH = "SELECT COUNT(*) FROM v_log WHERE result = 'успешно' AND v_log.workend>DATE('%s')";
+    final private String GET_USERSUCCESSTODAY = "SELECT COUNT(*) AS cnt FROM v_log WHERE result = 'успешно' and login = '%s' and v_log.workend > DATE('%s')";
+    final private String GET_SUCCESSMONTH = "SELECT COUNT(*) AS cnt FROM v_log WHERE result = 'успешно' AND v_log.workend>DATE('%s')";
     final private String GET_ALLSUCCESS = "SELECT COUNT(*) AS succ FROM v_log WHERE result = 'успешно'";
     final private String GET_ALLERRORS = "SELECT COUNT(*) AS err FROM v_log WHERE result <> 'успешно'";
-    final private String GET_ALLPROCSMONTH = "SELECT COUNT(*) FROM v_log WHERE v_log.workend>DATE('%s')";
+    final private String GET_ALLPROCSMONTH = "SELECT COUNT(*) AS cnt FROM v_log WHERE v_log.workend>DATE('%s')";
     final private String GET_ERRORS = "SELECT COUNT(*) AS err FROM v_log WHERE result <> 'успешно' and login = '%s'";
     final private String GET_SECONDS = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s'";
+    final private String GET_SECONDSTODAY = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
 
     JdbcTemplate jdbcTemplate;
     public InfocenterDAO(JdbcTemplate jdbcTemplate) {
@@ -91,7 +95,7 @@ public class InfocenterDAO {
         String sql = String.format(GET_SUCCESSMONTH,days30);
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
         while(rowSet.next()){
-            result = rowSet.getInt("err");
+            result = rowSet.getInt("cnt");
         }
         return result;
     }
@@ -101,10 +105,41 @@ public class InfocenterDAO {
         String sql = String.format(GET_ALLPROCSMONTH,days30);
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
         while(rowSet.next()){
-            result = rowSet.getInt("err");
+            result = rowSet.getInt("cnt");
+        }
+        return result;
+    }
+    //количество успешных процессов сегодня по логину
+    public int getSuccessProcessToDay(String login){
+        int result = 0;
+        String day = Util.getDatebyFormat(Util.ToDay(),"yyyy-MM-dd");
+        String sql = String.format(GET_USERSUCCESSTODAY,login,day);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while(rowSet.next()){
+            result = rowSet.getInt("cnt");
+        }
+        return result;
+    }
+    //общее количество процессов сегодня по логину
+    public int getProcessToDay(String login){
+        int result = 0;
+        String day = Util.getDatebyFormat(Util.ToDay(),"yyyy-MM-dd");
+        String sql = String.format(GET_USERTODAY,login,day);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while(rowSet.next()){
+            result = rowSet.getInt("cnt");
         }
         return result;
     }
 
-
+    public int getSecondsToDay(String login) {
+        int result = 0;
+        String day = Util.getDatebyFormat(Util.ToDay(),"yyyy-MM-dd");
+        String sql = String.format(GET_SECONDSTODAY,login, day);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while(rowSet.next()){
+            result = rowSet.getInt("tt");
+        }
+        return result;
+    }
 }

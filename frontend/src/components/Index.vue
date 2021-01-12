@@ -2,6 +2,7 @@
   <div class="main">
     <div class="panel">
       <h2>BotX</h2>
+      <common-stat/>
       <div class="grid-view">
         <Card :number="index+1" :login="i" v-for="(i,index) in logins" :key="i"/>
       </div>
@@ -11,11 +12,15 @@
 
 <script>
 import Card from "@/components/Card.vue"
+import CommonStat from "@/components/CommonStat.vue"
+
 export default {
  components:{
-   Card
+   Card,
+   CommonStat
  },
- data:function(){
+
+   data:function(){
    return {
      
    }

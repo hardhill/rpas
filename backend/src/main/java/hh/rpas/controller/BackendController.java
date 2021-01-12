@@ -73,8 +73,30 @@ public class BackendController {
         result = infocenterDAO.getSeconds(login);
         return result;
     }
-    //
-
+    //сумарное время затраченное пользователем
+    @RequestMapping(path="/secondsday")
+    public int getSecondsToDay(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSecondsToDay(login);
+        return result;
+    }
+    //общее число процессов пользователя сегодня
+    @RequestMapping(path="/processtoday")
+    public int getAllProcsToDay(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getProcessToDay(login);
+        return result;
+    }
+    //общее число успешных процессов пользователя сегодня
+    @RequestMapping(path="/successtoday")
+    public int getSuccessToDay(@RequestParam String login){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccessProcessToDay(login);
+        return result;
+    }
 
 
 }
