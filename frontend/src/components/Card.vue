@@ -1,21 +1,21 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <div class="title"><img src="1.png" /></div>
+      <div class="title"><img src="1.png" alt="Header" /></div>
       <div class="list-point">{{ number }}</div>
       <div class="login">{{ login }}</div>
     </div>
     <div class="card-body">
       <div class="time-info">
-        <img src="clock_color.png" />
+        <img src="clock_color.png" alt="clock"/>
         <div class="time-text">{{seconds}}</div>
       </div>
       <div class="sign-info">
-        <img src="check.png" /><span>{{ succproc }}</span>
-        <img src="cancel_2.png" /><span>{{ errproc }}</span>
+        <img src="check.png" alt="check" /><span>{{ succproc }}</span>
+        <img src="cancel_2.png" alt="cancel" /><span>{{ errproc }}</span>
       </div>
     </div>
-    <div class="card-footer"><img src="angle-arrow-down.png" /></div>
+    <div class="card-footer"><img src="angle-arrow-down.png" alt="" /></div>
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
         .then((resp) => {
           this.n_errproc = resp.data;
         })
-        .catch((err) => {});
+        .catch((err) => {console.log(err)});
     },
     getSuccproc(login) {
       axios
@@ -65,7 +65,7 @@ export default {
       axios
         .get("http://localhost:8098/api/seconds?login=" + login)
         .then((response) => {
-            console.log(response)
+            
           this.n_seconds = response.data;
         })
         .catch((err) => {
@@ -92,7 +92,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .card {
   display: block;
   width: 14rem;

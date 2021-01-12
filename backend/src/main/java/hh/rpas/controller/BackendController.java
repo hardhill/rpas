@@ -17,26 +17,55 @@ public class BackendController {
     JdbcTemplate jdbcTemplate;
     private InfocenterDAO infocenterDAO;
 
+    // все логины в системе
     @RequestMapping(path = "/logins")
     public List<String> getLogins() {
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
         return infocenterDAO.getLogins();
     }
+    //все ошибочные процессы RPA и пользователя если логин указан
     @RequestMapping(path="/errproc")
     public int getErrorProcess(@RequestParam String login){
         int result = 0;
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
-        result = infocenterDAO.getErrorProcess(login);
+        if (login.length()==0){
+            result = infocenterDAO.getErrorProcess();
+        }else{
+            result = infocenterDAO.getErrorProcess(login);
+        }
+
         return result;
     }
+    //все успешные процессы RPA и пользователя если логин указан
     @RequestMapping(path="/succproc")
     public int getSuccProcess(@RequestParam String login){
         int result = 0;
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
-        result = infocenterDAO.getSuccProcess(login);
+        if (login.length()==0){
+            result = infocenterDAO.getSuccessProcs();
+        }else {
+            result = infocenterDAO.getSuccessProcs(login);
+        }
+        return result;
+    }
+    //все успешные процессы RPA за 30 дней
+    @RequestMapping(path="/successmonth")
+    public int getSuccessProcsMonth(){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccessMonth();
+        return result;
+    }
+    //все процессы RPA за 30 дней
+    @RequestMapping(path="/allprocsmonth")
+    public int getAllProcsMonth(){
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getAllProcsMonth();
         return result;
     }
 
+    //сумарное время затраченное пользователем
     @RequestMapping(path="/seconds")
     public int getSeconds(@RequestParam String login){
         int result = 0;
@@ -44,8 +73,8 @@ public class BackendController {
         result = infocenterDAO.getSeconds(login);
         return result;
     }
-    // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'
-    // Required because of 'mode: history' usage in frontend routing, see README for further details
+    //
+
 
 
 }
