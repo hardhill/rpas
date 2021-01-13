@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <div class="title"><img src="1.png" alt="Header" /></div>
+      <div class="title"><img :src="number+'.png'" alt="Header" /></div>
       <div class="list-point">{{ number }}</div>
       <div class="login">{{ login }}</div>
     </div>
@@ -21,7 +21,7 @@
 
 <script>
 import axios from "axios";
-const URL_ROOT = "http://localhost:8098/api/"
+
 export default {
   name: "Card",
   props: ["number", "login"],
@@ -43,13 +43,13 @@ export default {
       return this.secondsToHms(this.n_seconds);
     },
     procent(){
-      return Math.floor((this.n_succproc/this.n_process)*100)
+      return Math.floor((this.n_succproc/(this.n_process>0?this.n_process:1))*100)
     }
   },
   methods: {
     getProcessToDay(login) {
       axios
-        .get(URL_ROOT+"processtoday?login=" + login)
+        .get(this.$store.state.url_root+"processtoday?login=" + login)
         .then((resp) => {
           this.n_process = resp.data;
         })
@@ -57,7 +57,7 @@ export default {
     },
     getSuccprocToDay(login) {
       axios
-        .get(URL_ROOT+"successtoday?login=" + login)
+        .get(this.$store.state.url_root+"successtoday?login=" + login)
         .then((response) => {
           this.n_succproc = response.data;
         })
@@ -67,7 +67,7 @@ export default {
     },
     getSeconds(login) {
       axios
-        .get(URL_ROOT+"secondsday?login=" + login)
+        .get(this.$store.state.url_root+"secondsday?login=" + login)
         .then((response) => {
             
           this.n_seconds = response.data;
