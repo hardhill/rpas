@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        url_root:"http://10.3.30.72:8098/api/",
+        url_root:"http://localhost:8098/api/",
         logins:[
             '000000',
             '000001'           
