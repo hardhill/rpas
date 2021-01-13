@@ -7,7 +7,7 @@
 
 <script>
 import axios from 'axios'
-const URL_ROOT = "http://localhost:8098/api/"
+
 export default {
     data:()=>{
         return {
@@ -29,14 +29,14 @@ export default {
     },
     methods:{
         GetAllProc(){
-            axios.get(URL_ROOT+"allprocsmonth").then((response)=>{
+            axios.get(this.$store.state.url_root+"allprocsmonth").then((response)=>{
                 this.n_allprocmonth = response.data
             }).catch((err)=>{
                 console.log(err)
             })
         },
         GetSuccessMonth(){
-            axios.get(URL_ROOT+"successmonth").then((response)=>{
+            axios.get(this.$store.state.url_root+"successmonth").then((response)=>{
                 this.n_successmonth = response.data
             }).catch((err)=>{
                 console.log(err)
