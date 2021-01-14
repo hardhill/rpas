@@ -23,6 +23,7 @@ public class InfocenterDAO {
     final private String GET_ERRORS = "SELECT COUNT(*) AS err FROM v_log WHERE result <> 'успешно' and login = '%s'";
     final private String GET_SECONDS = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s'";
     final private String GET_SECONDSTODAY = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
+    final private String GET_SUCCESSSECONDSMONTH = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_logsuccess WHERE v_logsuccess.workend > DATE('%s')";
 
     JdbcTemplate jdbcTemplate;
     public InfocenterDAO(JdbcTemplate jdbcTemplate) {
@@ -138,6 +139,17 @@ public class InfocenterDAO {
         String sql = String.format(GET_SECONDSTODAY,login, day);
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
         while(rowSet.next()){
+            result = rowSet.getInt("tt");
+        }
+        return result;
+    }
+
+    public int getSuccessSecondsMonth() {
+        int result = 0;
+        String days30 = Util.getDatebyFormat(Util.minusDays(30), "yyyy-MM-dd");
+        String sql = String.format(GET_SUCCESSSECONDSMONTH, days30);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
             result = rowSet.getInt("tt");
         }
         return result;

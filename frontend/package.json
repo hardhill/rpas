@@ -1,6 +1,7 @@
 {
   "name": "frontend",
-  "version": "4.0.0",
+  "title": "RPA монитор",
+  "version": "2.0.0",
   "description": "A Vue.js & Spring Boot example project",
   "author": "Jonas Hecht <jonas.hecht@codecentric.de>",
   "private": true,

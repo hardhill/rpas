@@ -1,7 +1,10 @@
 <template>
   <div class="main">
     <div class="panel">
-      <h2>BotX</h2>
+      <div class="panel-header">
+        <div class="caption">BotX <span class="version">0.2 от 14 янв 21г.</span></div>
+        <InfoHelp/>
+      </div>
       <common-stat/>
       <div class="grid-view">
         <Card :number="index+1" :login="i" v-for="(i,index) in logins" :key="i"/>
@@ -13,11 +16,13 @@
 <script>
 import Card from "@/components/Card.vue"
 import CommonStat from "@/components/CommonStat.vue"
+import InfoHelp from "@/components/Info.vue"
 
 export default {
  components:{
    Card,
-   CommonStat
+   CommonStat,
+   InfoHelp
  },
 
    data:function(){
@@ -55,10 +60,25 @@ export default {
   display: block;
   width: 640px;
   background-color: rgb(45, 44, 43);
-  padding: 2rem 1rem;
+
 }
-h2 {
-  color: aliceblue;
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: #0086B3;
+  background-color: #97bacf;
+}
+
+.caption {
+  font-size: 1.5rem;
+}
+
+.version {
+  color: #7f7f7f;
+  font-size: 0.8rem;
 }
 .grid-view{
   display: flex;

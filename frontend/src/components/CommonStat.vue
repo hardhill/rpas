@@ -1,7 +1,8 @@
 <template>
   <div class="card">
-      <div>За последние 30 дней успешных завершений проц.: <span>{{successprocmonth}} ({{procentsuccess}}%)</span></div>
-      <div></div>
+      <div>За последние 30 дней успешно завершенных процессов.: <span class="bfont">{{successprocmonth}} ({{procentsuccess}}%)</span>
+      </div>
+      <div>На это затрачено <span class="bfont">{{sucsecmonth}}</span></div>
   </div>
 </template>
 
@@ -12,7 +13,8 @@ export default {
     data:()=>{
         return {
             n_allprocmonth:1,
-            n_successmonth:1
+            n_successmonth: 1,
+            n_secondsmonth: 0
         }
     },
     computed:{
@@ -25,6 +27,14 @@ export default {
             }else{
                 return Math.floor((this.n_successmonth/this.n_allprocmonth)*100)
             }
+        },
+        sucsecmonth() {
+            var sec = Number(this.n_secondsmonth)
+            var d = Math.floor(sec / (24 * 3600))
+            var h = Math.floor((sec % (24 * 3600)) / 3600)
+            var m = Math.floor((sec % 3600) / 60)
+            var s = Math.floor(sec % 60)
+            return `${d}д. ${h}ч. ${m}м. ${s}сек.`
         }
     },
     methods:{
@@ -42,11 +52,18 @@ export default {
                 console.log(err)
             })
         },
+        GetSuccessSecMonth() {
+            axios.get(this.$store.state.url_root + "secondsmonth").then((response) => {
+                this.n_secondsmonth = response.data
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
     },
     mounted(){
         this.GetAllProc()
         this.GetSuccessMonth()
-
+        this.GetSuccessSecMonth()
     }
 }
 </script>
@@ -54,8 +71,12 @@ export default {
 <style scoped>
 .card{
     display: block;
-    background-color: beige;
-    border-radius: 5px;
+    background-color: #eaf6ff;
     padding: 1rem 2rem;
+}
+
+.bfont {
+    font-weight: bold;
+    color: #2d5878;
 }
 </style>

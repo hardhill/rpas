@@ -117,7 +117,7 @@ export default {
 }
 .login {
   position: absolute;
-  color: rgb(218, 193, 193);
+  color: rgb(249, 255, 233);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   right: 5px;
   top: 4px;

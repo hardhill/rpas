@@ -65,6 +65,15 @@ public class BackendController {
         return result;
     }
 
+    //время затраченное на успешное подписание за последние 30 дней
+    @RequestMapping(path = "/secondsmonth")
+    public int getSuccessTimeMonth() {
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccessSecondsMonth();
+        return result;
+    }
+
     //сумарное время затраченное пользователем
     @RequestMapping(path="/seconds")
     public int getSeconds(@RequestParam String login){

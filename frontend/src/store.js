@@ -7,10 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         url_root:"http://localhost:8098/api/",
-        logins:[
-            '000000',
-            '000001'           
-        ],
+        logins: [],
 
     },
     mutations: {
@@ -18,6 +15,7 @@ export default new Vuex.Store({
         set_logins(state,payload){
             state.logins = payload
         }
+
     },
     actions: {
         act_logins({commit}){
@@ -30,6 +28,5 @@ export default new Vuex.Store({
     },
     getters: {
         getLogins:state => state.logins
-        
     }
 })
