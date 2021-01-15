@@ -1,10 +1,15 @@
 package hh.rpas.controller;
 
 
+import hh.rpas.models.DataAllProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -107,5 +112,13 @@ public class BackendController {
         return result;
     }
 
+    // данные за 10 рабочих дней
+    @RequestMapping(path = "/dataprocess")
+    public List<DataAllProcess> getDataProcess() {
+        List<DataAllProcess> result = new ArrayList<DataAllProcess>();
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getDataProcess();
+        return result;
+    }
 
 }

@@ -1,13 +1,13 @@
 package hh.rpas.controller;
 
 import hh.rpas.Util;
+import hh.rpas.models.DataAllProcess;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import java.text.Format;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class InfocenterDAO {
 
@@ -24,6 +24,8 @@ public class InfocenterDAO {
     final private String GET_SECONDS = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s'";
     final private String GET_SECONDSTODAY = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
     final private String GET_SUCCESSSECONDSMONTH = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_logsuccess WHERE v_logsuccess.workend > DATE('%s')";
+    final private String GET_DATAPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_log GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 10";
+    final private String GET_DATASUCCESSPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_logsuccess GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 10";
 
     JdbcTemplate jdbcTemplate;
     public InfocenterDAO(JdbcTemplate jdbcTemplate) {
@@ -151,6 +153,25 @@ public class InfocenterDAO {
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
         while (rowSet.next()) {
             result = rowSet.getInt("tt");
+        }
+        return result;
+    }
+
+    public List<DataAllProcess> getDataProcess() {
+        List<DataAllProcess> result = new ArrayList<DataAllProcess>();
+        String sql = GET_DATAPROCESS;
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            Date d = rowSet.getDate("dt");
+            int pr = rowSet.getInt("cnt");
+            result.add(0, new DataAllProcess(d, pr, 0));
+        }
+        sql = GET_DATASUCCESSPROCESS;
+        rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            Date d = rowSet.getDate("dt");
+            int pr = rowSet.getInt("cnt");
+            result.stream().filter(obj -> obj.getWorkdate().equals(d)).findFirst().get().setSuccessproc(pr);
         }
         return result;
     }

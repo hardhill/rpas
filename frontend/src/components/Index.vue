@@ -6,6 +6,7 @@
         <InfoHelp/>
       </div>
       <common-stat/>
+      <chart-one/>
       <div class="grid-view">
         <Card :number="index+1" :login="i" v-for="(i,index) in logins" :key="i"/>
       </div>
@@ -14,15 +15,17 @@
 </template>
 
 <script>
-import Card from "@/components/Card.vue"
-import CommonStat from "@/components/CommonStat.vue"
-import InfoHelp from "@/components/Info.vue"
+  import Card from "@/components/Card.vue"
+  import CommonStat from "@/components/CommonStat.vue"
+  import InfoHelp from "@/components/Info.vue"
+  import ChartOne from "@/components/ChartOne.vue";
 
-export default {
+  export default {
  components:{
    Card,
    CommonStat,
-   InfoHelp
+   InfoHelp,
+   ChartOne
  },
 
    data:function(){
