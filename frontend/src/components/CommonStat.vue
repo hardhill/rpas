@@ -1,15 +1,15 @@
 <template>
   <div class="card">
-      <div>За последние 30 дней успешно завершенных процессов.: <span class="bfont">{{successprocmonth}} ({{procentsuccess}}%)</span>
+      <div>За последние 20 рабочих дней успешно завершенных процессов.: <span class="bfont">{{successprocmonth}} ({{procentsuccess}}%)</span>
       </div>
       <div>На это затрачено <span class="bfont">{{sucsecmonth}}</span></div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+    import axios from 'axios'
 
-export default {
+    export default {
     data:()=>{
         return {
             n_allprocmonth:1,
@@ -39,21 +39,21 @@ export default {
     },
     methods:{
         GetAllProc(){
-            axios.get(this.$store.state.url_root+"allprocsmonth").then((response)=>{
+            axios.get(this.$store.state.url_root + "allprocs20").then((response) => {
                 this.n_allprocmonth = response.data
             }).catch((err)=>{
                 console.log(err)
             })
         },
         GetSuccessMonth(){
-            axios.get(this.$store.state.url_root+"successmonth").then((response)=>{
+            axios.get(this.$store.state.url_root + "success20").then((response) => {
                 this.n_successmonth = response.data
             }).catch((err)=>{
                 console.log(err)
             })
         },
         GetSuccessSecMonth() {
-            axios.get(this.$store.state.url_root + "secondsmonth").then((response) => {
+            axios.get(this.$store.state.url_root + "seconds20").then((response) => {
                 this.n_secondsmonth = response.data
             }).catch((err) => {
                 console.log(err)

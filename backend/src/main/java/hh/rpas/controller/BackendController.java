@@ -2,6 +2,7 @@ package hh.rpas.controller;
 
 
 import hh.rpas.models.DataAllProcess;
+import hh.rpas.models.DataProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -61,12 +62,31 @@ public class BackendController {
         result = infocenterDAO.getSuccessMonth();
         return result;
     }
+
+    //все успешные процессы RPA за 20 рабочих дней
+    @RequestMapping(path = "/success20")
+    public int getSuccessProc20() {
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccess20();
+        return result;
+    }
+
     //все процессы RPA за 30 дней
     @RequestMapping(path="/allprocsmonth")
     public int getAllProcsMonth(){
         int result = 0;
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
         result = infocenterDAO.getAllProcsMonth();
+        return result;
+    }
+
+    //все процессы RPA за 20 дней
+    @RequestMapping(path = "/allprocs20")
+    public int getAllProcs20() {
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getAllProcs20();
         return result;
     }
 
@@ -79,6 +99,14 @@ public class BackendController {
         return result;
     }
 
+    //время затраченное на успешное подписание за последние 20 рабочих дней
+    @RequestMapping(path = "/seconds20")
+    public int getSuccessTime20() {
+        int result = 0;
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getSuccessSeconds20();
+        return result;
+    }
     //сумарное время затраченное пользователем
     @RequestMapping(path="/seconds")
     public int getSeconds(@RequestParam String login){
@@ -112,12 +140,21 @@ public class BackendController {
         return result;
     }
 
-    // данные за 10 рабочих дней
-    @RequestMapping(path = "/dataprocess")
-    public List<DataAllProcess> getDataProcess() {
+    // данные за 20 рабочих дней
+    @RequestMapping(path = "/alldataprocess")
+    public List<DataAllProcess> getDataAllProcess() {
         List<DataAllProcess> result = new ArrayList<DataAllProcess>();
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
-        result = infocenterDAO.getDataProcess();
+        result = infocenterDAO.getDataAllProcess();
+        return result;
+    }
+
+    // данные по типам процессов за 20 рабочих дни
+    @RequestMapping(path = "/datatypeprocess")
+    public List<DataProcess> getDataProcessbyDay() {
+        List<DataProcess> result = new ArrayList<>();
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getDataByProcess();
         return result;
     }
 

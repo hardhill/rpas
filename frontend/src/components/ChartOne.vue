@@ -1,6 +1,6 @@
 <script>
     import {Bar} from 'vue-chartjs'
-     import horizonalLinePlugin from '@/components/stackbar.js'
+
     import axios from "axios";
 
     export default {
@@ -44,7 +44,7 @@
         }),
         methods: {
             LoadDataProcess() {
-                axios.get(this.$store.state.url_root + "dataprocess").then((response) => {
+                axios.get(this.$store.state.url_root + "alldataprocess").then((response) => {
                     var arr = response.data
 
                     this.chartdata.labels = []

@@ -5,27 +5,26 @@
         <div class="caption">BotX <span class="version">0.2 от 14 янв 21г.</span></div>
         <InfoHelp/>
       </div>
-      <common-stat/>
-      <chart-one/>
-      <div class="grid-view">
-        <Card :number="index+1" :login="i" v-for="(i,index) in logins" :key="i"/>
+        <ChartViewer backcolor="#eaf6ff"/>
+
+        <div class="grid-view">
+            <Card :number="index+1" :login="item" v-for="(item,index) in logins" :key="item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import Card from "@/components/Card.vue"
-  import CommonStat from "@/components/CommonStat.vue"
-  import InfoHelp from "@/components/Info.vue"
-  import ChartOne from "@/components/ChartOne.vue";
+    import Card from "@/components/Card.vue"
+    import InfoHelp from "@/components/Info.vue"
 
-  export default {
+    import ChartViewer from "@/components/ChartViewer";
+
+    export default {
  components:{
    Card,
-   CommonStat,
    InfoHelp,
-   ChartOne
+     ChartViewer
  },
 
    data:function(){
