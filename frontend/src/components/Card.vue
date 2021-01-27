@@ -1,35 +1,45 @@
 <template>
-  <div class="card">
+  <div class="card" ref="card">
     <div class="card-header">
       <div class="title"><img :src="number+'.png'" alt="Header" /></div>
       <div class="list-point">{{ number }}</div>
       <div class="login">{{ login }}</div>
     </div>
     <div class="card-body">
-      <div class="time-info">
+      <div class="time-info" v-if="!b_cardopen">
         <img src="clock_color.png" alt="clock"/>
         <div class="time-text">{{seconds}}</div>
       </div>
-      <div class="sign-info">
+      <div class="sign-info" v-if="!b_cardopen">
         <img src="check_all.png" alt="check_all" /><span>{{ process }}</span>
         <img src="check.png" alt="check" /><span>{{ succproc }} ({{procent}}%)</span>
       </div>
+      <div v-if="b_cardopen">
+        <ChartTwo :height="180"/>
+      </div>
     </div>
-    <div class="card-footer"><img src="angle-arrow-down.png" alt="" /></div>
+    <div class="card-footer" @click="Folding"><span v-html="triangleimg"></span></div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+  import ChartTwo from "@/components/ChartTwo.vue";
+  import axios from "axios";
 
-export default {
+  export default {
   name: "Card",
+    components: {
+      ChartTwo
+    },
   props: ["number", "login"],
   data: () => {
     return {
       n_succproc: 0,
       n_process: 0,
       n_seconds: 0,
+      b_cardopen: false,
+      img_1: "&blacktriangledown;",
+      img_2: "&blacktriangle;"
     };
   },
   computed: {
@@ -44,9 +54,24 @@ export default {
     },
     procent(){
       return Math.floor((this.n_succproc/(this.n_process>0?this.n_process:1))*100)
+    },
+    triangleimg() {
+      return this.b_cardopen ? this.img_2 : this.img_1
     }
   },
   methods: {
+    Folding() {
+      //console.log(this.$refs.card.style)
+      this.b_cardopen = !this.b_cardopen
+      if (this.b_cardopen) {
+        this.$refs.card.style.width = "36rem"
+        this.$refs.card.style.height = "28rem"
+      } else {
+        this.$refs.card.style.width = "14rem"
+        this.$refs.card.style.height = ""
+      }
+
+    },
     getProcessToDay(login) {
       axios
         .get(this.$store.state.url_root+"processtoday?login=" + login)
@@ -98,7 +123,8 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 14rem;
   margin: 1rem 2rem;
   background-color: aliceblue;
@@ -139,11 +165,18 @@ export default {
 }
 .sign-info {
   display: flex;
-  margin: 1rem;
+  margin: .5rem 1rem;
   justify-content: space-between;
   align-items: center;
 }
-.card-footer img {
-  cursor: pointer;
+
+.card-body {
+  flex-grow: 2;
 }
+
+.card-footer {
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
 </style>

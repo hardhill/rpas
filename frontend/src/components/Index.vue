@@ -2,13 +2,12 @@
   <div class="main">
     <div class="panel">
       <div class="panel-header">
-        <div class="caption">BotX <span class="version">0.2 от 14 янв 21г.</span></div>
+          <div class="caption">BotX <span class="version">вер. 0.5 от 27 янв 21г.</span></div>
         <InfoHelp/>
       </div>
         <ChartViewer backcolor="#eaf6ff"/>
-
         <div class="grid-view">
-            <Card :number="index+1" :login="item" v-for="(item,index) in logins" :key="item"/>
+            <Card :number="index + 1" :login="item" v-for="(item,index) in logins" :key="item"/>
       </div>
     </div>
   </div>

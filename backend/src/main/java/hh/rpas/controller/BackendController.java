@@ -149,12 +149,21 @@ public class BackendController {
         return result;
     }
 
-    // данные по типам процессов за 20 рабочих дни
-    @RequestMapping(path = "/datatypeprocess")
-    public List<DataProcess> getDataProcessbyDay() {
+    // данные по типам процессов за дату
+    @RequestMapping(path = "/processesbydate")
+    public List<DataProcess> getDataProcessbyDay(@RequestParam(name = "dt") String dts) {
         List<DataProcess> result = new ArrayList<>();
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
-        result = infocenterDAO.getDataByProcess();
+        result = infocenterDAO.getDataProcess(dts);
+        return result;
+    }
+
+    // список дат последних рабочих дней
+    @RequestMapping(path = "/dates")
+    public List<String> getDates() {
+        List<String> result = new ArrayList<>();
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getDates();
         return result;
     }
 

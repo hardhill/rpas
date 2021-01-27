@@ -6,7 +6,7 @@
             <div class="control" @click="ForwordView">&blacktriangleright;</div>
         </div>
         <div v-if="n_currentview==0">
-            <ChartOne/>
+            <ChartOne @clickupdate="viewtable"/>
         </div>
         <div v-if="n_currentview==1">
             <TableOne/>
@@ -31,6 +31,7 @@
         ],
         data() {
             return {
+                n_maxviewers: 2,
                 s_title: "",
                 n_allsuccessproc: 1,
                 n_spendseconds: 1,
@@ -54,16 +55,20 @@
             }
         },
         methods: {
+            viewtable() {
+                this.n_currentview = 1
+                this.OnChangeView(this.n_currentview)
+            },
             BackView() {
                 if (this.n_currentview == 0) {
-                    this.n_currentview = 2
+                    this.n_currentview = this.n_maxviewers - 1
                 } else {
                     this.n_currentview--
                 }
                 this.OnChangeView(this.n_currentview)
             },
             ForwordView() {
-                if (this.n_currentview == 2) {
+                if (this.n_currentview == this.n_maxviewers - 1) {
                     this.n_currentview = 0
                 } else {
                     this.n_currentview++

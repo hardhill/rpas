@@ -15,6 +15,7 @@ public class InfocenterDAO {
 
     private static final String GET_SUCCESSSECONDS20 = "SELECT SUM(t1.tt) as tt FROM (SELECT DATE(workend),sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_logsuccess GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 20) AS t1";
     private static final String GET_DATAPROCESSOFDAY = "SELECT typeproc, COUNT(*) cnt, SUM(TIMESTAMPDIFF(SECOND,workbegin,workend)) tt FROM v_log WHERE DATE(v_log.workend)= '%s' GROUP BY v_log.typeproc ORDER BY 1";
+    private static final String GET_DATES = "SELECT DATE(workend) as dt FROM v_logsuccess GROUP BY dt ORDER BY 1 DESC LIMIT 20";
     private final String GET_USERTODAY = "SELECT COUNT(*) AS cnt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
     final private String GET_LOGINS = "SELECT login FROM v_login";
     final private String GET_SUCCESS = "SELECT COUNT(*) AS succ FROM v_log WHERE result = 'успешно' and login = '%s'";
@@ -30,7 +31,8 @@ public class InfocenterDAO {
     final private String GET_SECONDSTODAY = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_log WHERE login = '%s' and v_log.workend > DATE('%s')";
     final private String GET_SUCCESSSECONDSMONTH = "SELECT sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_logsuccess WHERE v_logsuccess.workend > DATE('%s')";
     final private String GET_DATESPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_log GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 20";
-    final private String GET_ADATESPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_log GROUP BY DATE(workend) ORDER BY 1 ASC LIMIT 20";
+    final private String GET_SUCCPROCBYTYPE = "SELECT typeproc,COUNT(*) cnt, sum(TIMESTAMPDIFF(SECOND,workbegin,workend)) AS tt FROM v_logsuccess WHERE DATE(v_logsuccess.workend)='%s' GROUP BY v_logsuccess.typeproc ORDER BY 1 ASC";
+    final private String GET_PROCBYTYPE = "SELECT typeproc, COUNT(*) cnt FROM v_log WHERE DATE(v_log.workend)='%s' GROUP BY v_log.typeproc ORDER BY 1 ASC";
     final private String GET_DATASUCCESSPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_logsuccess GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 20";
 
     JdbcTemplate jdbcTemplate;
@@ -216,29 +218,41 @@ public class InfocenterDAO {
         return result;
     }
 
-    // данные по типам процессов с разбивкой по датам
-    public List<DataProcess> getDataByProcess() {
-        List<DataProcess> result = new ArrayList<>();
-
-        String sql = GET_ADATESPROCESS;
+    // последние 20 рабочих дней
+    public List<String> getDates() {
+        List<String> result = new ArrayList<>();
+        String sql = GET_DATES;
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
         while (rowSet.next()) {
-            Date d = rowSet.getDate("dt");
-
-            String ds = Util.getDatebyFormat(d, "yyyy-MM-dd");
-            sql = String.format(GET_DATAPROCESSOFDAY, ds);
-            SqlRowSet rowSet1 = jdbcTemplate.queryForRowSet(sql);
-            while (rowSet1.next()) {
+            String ds = Util.getDatebyFormat(rowSet.getDate("dt"), "yyyy-MM-dd");
+            result.add(ds);
+        }
+        return result;
+    }
+    // данные по типам процессов с разбивкой по датам
+    public List<DataProcess> getDataProcess(String ds) {
+        List<DataProcess> result = new ArrayList<>();
+        String sql = String.format(GET_PROCBYTYPE, ds);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
                 DataProcess dataProcess = new DataProcess();
                 dataProcess.setDatework(ds);
                 dataProcess.setProcessname("");
-                dataProcess.setProcess(rowSet1.getInt("typeproc"));
-                dataProcess.setCountprocess(rowSet1.getInt("cnt"));
+            dataProcess.setProcess(rowSet.getInt("typeproc"));
+            dataProcess.setCountprocess(rowSet.getInt("cnt"));
                 dataProcess.setSuccessproc(0);
                 dataProcess.setSeconds(0);
                 result.add(dataProcess);
             }
+        sql = String.format(GET_SUCCPROCBYTYPE, ds);
+        rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            int idproc = rowSet.getInt("typeproc");
+            DataProcess data = result.stream().filter(i -> i.getProcess() == idproc).findFirst().get();
+            data.setSuccessproc(rowSet.getInt("cnt"));
+            data.setSeconds(rowSet.getInt("tt"));
         }
+
         return result;
     }
 }

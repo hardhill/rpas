@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>backend</artifactId>
+	<artifactId>rpamonitor</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>hh</groupId>
 		<artifactId>rpas</artifactId>
-		<version>0.1</version>
+		<version>0.5</version>
 	</parent>
 
 	<properties>
@@ -18,8 +18,6 @@
 		<java.version>1.8</java.version>
 
 		<!-- backend dependencies -->
-		<rest-assured.version>4.3.3</rest-assured.version>
-		<postgresql.version>42.2.18</postgresql.version>
 		<groovy.version>3.0.7</groovy.version>
 	</properties>
 
@@ -56,11 +54,7 @@
 		</dependency>
 
 		<!-- PostgreSQL used in Staging and Production environment, e.g. on Heroku -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
-        </dependency>
+
 
 		<!-- Testing -->
 		<dependency>
@@ -69,12 +63,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${rest-assured.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- The fixed groovy version is necessary after upgrade to Rest-Assured 4.3. because of conflicts otherwise
  		see https://stackoverflow.com/questions/61020200/getting-java-lang-abstractmethoderror-when-i-test-using-rest-assured -->
@@ -101,12 +89,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.7.0</version>
-			<scope>test</scope>
-		</dependency>
+
 
 	</dependencies>
 
