@@ -158,6 +158,16 @@ public class BackendController {
         return result;
     }
 
+    // данные по типам процессов за дату выполненные заданным логином
+    @RequestMapping(path = "/processesbydateandlogin")
+    public List<DataProcess> getLoginDataProcessbyDay(@RequestParam(name = "dt") String dts,
+                                                      @RequestParam(name = "login") String login) {
+        List<DataProcess> result = new ArrayList<>();
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getLoginDataProcess(dts, login);
+        return result;
+    }
+
     // список дат последних рабочих дней
     @RequestMapping(path = "/dates")
     public List<String> getDates() {

@@ -66,6 +66,8 @@ export default new Vuex.Store({
         act_dates({commit}) {
             axios.get(this.state.url_root + "dates").then((response) => {
                 commit('set_worksdates', response.data)
+                if (response.data.indexOf(this.state.s_currentday) == -1)
+                    commit('set_currentday', response.data[0])
             }).catch((err) => {
                 console.log(err)
             })
@@ -87,7 +89,8 @@ export default new Vuex.Store({
             }).catch((err) => {
                 console.log(err)
             })
-        }
+        },
+
     },
     getters: {
         getLogins: state => state.logins,

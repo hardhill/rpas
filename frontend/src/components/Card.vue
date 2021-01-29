@@ -23,10 +23,10 @@
 </template>
 
 <script>
-  import ChartTwo from "@/components/ChartTwo.vue";
-  import axios from "axios";
+    import ChartTwo from "@/components/ChartTwo.vue";
+    import axios from "axios";
 
-  export default {
+    export default {
   name: "Card",
     components: {
       ChartTwo
@@ -125,7 +125,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: 14rem;
+    width: 100%;
   margin: 1rem 2rem;
   background-color: aliceblue;
 }

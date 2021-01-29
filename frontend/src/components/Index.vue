@@ -2,28 +2,30 @@
   <div class="main">
     <div class="panel">
       <div class="panel-header">
-          <div class="caption">BotX <span class="version">вер. 0.5 от 27 янв 21г.</span></div>
+        <div class="caption">BotX <span class="version">вер. 0.72 от 29 янв 21г.</span></div>
         <InfoHelp/>
       </div>
         <ChartViewer backcolor="#eaf6ff"/>
+
         <div class="grid-view">
-            <Card :number="index + 1" :login="item" v-for="(item,index) in logins" :key="item"/>
-      </div>
+          <CardLong :number="index +1" :login="item" v-for="(item,index) in logins" :key="item"/>
+        </div>
+
     </div>
   </div>
 </template>
 
 <script>
-    import Card from "@/components/Card.vue"
-    import InfoHelp from "@/components/Info.vue"
 
-    import ChartViewer from "@/components/ChartViewer";
+  import InfoHelp from "@/components/Info.vue"
+  import CardLong from "@/components/CardLong"
+  import ChartViewer from "@/components/ChartViewer";
 
-    export default {
+  export default {
  components:{
-   Card,
    InfoHelp,
-     ChartViewer
+   ChartViewer,
+   CardLong
  },
 
    data:function(){
@@ -39,10 +41,14 @@
  methods:{
    getlogins(){
     this.$store.dispatch('act_logins')
+   },
+   getDates() {
+     this.$store.dispatch('act_dates')
    }
  },
  mounted(){
    this.getlogins()
+   this.getDates()
  }
   
 };
@@ -83,6 +89,7 @@
 }
 .grid-view{
   display: flex;
+
   flex-wrap: wrap;
   justify-content: center;
 }

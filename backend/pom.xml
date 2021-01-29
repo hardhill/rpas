@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>hh</groupId>
 		<artifactId>rpas</artifactId>
-		<version>0.5</version>
+        <version>0.7</version>
 	</parent>
 
 	<properties>
