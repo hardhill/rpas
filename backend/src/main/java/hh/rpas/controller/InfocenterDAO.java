@@ -3,6 +3,7 @@ package hh.rpas.controller;
 import hh.rpas.Util;
 import hh.rpas.models.DataAllProcess;
 import hh.rpas.models.DataProcess;
+import hh.rpas.models.Log;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
@@ -38,6 +39,7 @@ public class InfocenterDAO {
     final private String GET_PROCBYTYPE = "SELECT typeproc, COUNT(*) cnt FROM v_log WHERE DATE(v_log.workend)='%s' GROUP BY v_log.typeproc ORDER BY 1 ASC";
     final private String GET_PROCBYTYPELOGIN = "SELECT typeproc, COUNT(*) cnt FROM v_log WHERE DATE(v_log.workend)='%s' and v_log.login = '%s' GROUP BY v_log.typeproc ORDER BY 1 ASC";
     final private String GET_DATASUCCESSPROCESS = "SELECT DATE(workend) as dt,COUNT(*) as cnt FROM v_logsuccess GROUP BY DATE(workend) ORDER BY 1 DESC LIMIT 20";
+    final private String GET_DATA = "SELECT * FROM v_log WHERE v_log.login LIKE 'XXX%' OR v_log.strahovatel LIKE '%XXX%' OR v_log.nomerobr LIKE '%XXX%' OR v_log.subtypeproc LIKE '%XXX%' OR v_log.result LIKE '%XXX%'";
 
     JdbcTemplate jdbcTemplate;
     public InfocenterDAO(JdbcTemplate jdbcTemplate) {
@@ -281,6 +283,23 @@ public class InfocenterDAO {
             DataProcess data = result.stream().filter(i -> i.getProcess() == idproc).findFirst().get();
             data.setSuccessproc(rowSet.getInt("cnt"));
             data.setSeconds(rowSet.getInt("tt"));
+        }
+        return result;
+    }
+
+    //поиск по журналу
+    public List<Log> getData(String txt) {
+        List<Log> result = new ArrayList<>();
+
+        String sql = GET_DATA.replaceAll("XXX", txt);
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql);
+        while (rowSet.next()) {
+            try {
+
+                result.add(new Log(rowSet.getString("login"), rowSet.getTimestamp("workbegin").toLocalDateTime(), rowSet.getTimestamp("workend").toLocalDateTime(),
+                        rowSet.getString("strahovatel"), rowSet.getInt("typeproc"), rowSet.getString("nomerobr"), rowSet.getString("subtypeproc"), rowSet.getString("result")));
+            } catch (Exception err) {
+            }
         }
         return result;
     }

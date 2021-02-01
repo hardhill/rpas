@@ -2,8 +2,12 @@
   <div class="main">
     <div class="panel">
       <div class="panel-header">
-        <div class="caption">BotX <span class="version">вер. 0.72 от 29 янв 21г.</span></div>
-        <InfoHelp/>
+          <AppCaption/>
+          <div class="menu">
+              <v-icon name="table" class="menu-table" @click="GotoTable"/>
+              <InfoHelp/>
+          </div>
+
       </div>
         <ChartViewer backcolor="#eaf6ff"/>
 
@@ -17,15 +21,17 @@
 
 <script>
 
-  import InfoHelp from "@/components/Info.vue"
-  import CardLong from "@/components/CardLong"
-  import ChartViewer from "@/components/ChartViewer";
+    import InfoHelp from "@/components/Info.vue"
+    import CardLong from "@/components/CardLong"
+    import ChartViewer from "@/components/ChartViewer";
+    import AppCaption from "@/components/AppCaption";
 
-  export default {
+    export default {
  components:{
    InfoHelp,
    ChartViewer,
-   CardLong
+     CardLong,
+     AppCaption
  },
 
    data:function(){
@@ -44,7 +50,10 @@
    },
    getDates() {
      this.$store.dispatch('act_dates')
-   }
+   },
+     GotoTable() {
+         this.$router.push("table")
+     }
  },
  mounted(){
    this.getlogins()
@@ -79,19 +88,24 @@
   background-color: #97bacf;
 }
 
-.caption {
-  font-size: 1.5rem;
-}
-
-.version {
-  color: #7f7f7f;
-  font-size: 0.8rem;
-}
 .grid-view{
   display: flex;
 
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.menu-table {
+    color: #004444;
+    margin-right: 1.5rem;
+    cursor: pointer;
 }
 
 </style>

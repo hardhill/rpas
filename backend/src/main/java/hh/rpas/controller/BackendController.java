@@ -3,6 +3,7 @@ package hh.rpas.controller;
 
 import hh.rpas.models.DataAllProcess;
 import hh.rpas.models.DataProcess;
+import hh.rpas.models.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -174,6 +175,15 @@ public class BackendController {
         List<String> result = new ArrayList<>();
         infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
         result = infocenterDAO.getDates();
+        return result;
+    }
+
+    //данные журнала
+    @RequestMapping(path = "/data")
+    public List<Log> getData(@RequestParam(name = "t") String txt) {
+        List<Log> result = new ArrayList<>();
+        infocenterDAO = infocenterDAO == null ? new InfocenterDAO(jdbcTemplate) : infocenterDAO;
+        result = infocenterDAO.getData(txt);
         return result;
     }
 
